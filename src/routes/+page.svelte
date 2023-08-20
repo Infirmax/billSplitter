@@ -21,9 +21,31 @@
 		items = bill.items;
 	}
 	
-	function split(){
-		console.log(document.getElementById("personButton"))
-		document.getElementById("personButton").className = 'highlighted'
+	function split(event){
+		const element = event.srcElement;
+		const person = people[element.getAttribute("data-person")];
+		const item = items[element.getAttribute("data-item")];
+		const count = element.getAttribute("data-counter")
+
+		// If this is a press
+		if(count%2 == 0){
+			element.style.backgroundColor = "#4CAF50";
+			person.items.push(item);
+			item.people.push(person);
+		}
+		// If this is an unpress
+		else{
+			element.style.backgroundColor = "#FFFFFF";
+			person.items.splice(element.getAttribute("data-person"), 1);
+			item.people.splice(element.getAttribute("data-item"), 1);
+		}
+
+		element.setAttribute("data-counter", parseInt(count) + 1);
+	}
+
+	let results = Object.entries({});
+	function calculate(){
+		results = Object.entries(bill.calculate());
 	}
 </script>
 
@@ -53,20 +75,20 @@
 	<h1>Menu Items</h1>
 	<button on:click={request_item}>+</button>
 </div>
-{#each items as item, index}
-	<p>Item #{index + 1}: {item.name} ${item.price}</p>
-	{#each people as person}
-		<button id="personButton" on:click={split}>{person}</button>
+{#each items as item, itemIndex}
+	<p>Item #{itemIndex + 1}: {item.name} ${item.price}</p>
+	{#each people as person, personIndex}
+		<button data-counter=0 data-person={personIndex} data-item={itemIndex} on:click={split}>{person}</button>
 	{/each}
 {/each}
 
+<br><button on:click={calculate}>Calculate</button>
+{#each results as [key, value]}
+	<p>Person {key} = {value}</p>
+{/each}
 
 <style>
 	.horizontal{
 		display: flex;
-	}
-	
-	.highlighted{
-		background-color: #4CAF50;
 	}
 </style>

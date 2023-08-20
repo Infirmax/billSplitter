@@ -1,7 +1,8 @@
 class Item{
-  constructor(name, price){
+  constructor(name, price, people=[]){
     this.name = name
     this.price = price
+    this.people = people
   }
 
   toString(){

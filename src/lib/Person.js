@@ -1,6 +1,7 @@
 class Person{
-	constructor(name) {
+	constructor(name, items=[]) {
 		this.name = name;
+		this.items = items
 	}
 
 	toString(){
